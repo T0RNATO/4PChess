@@ -1,0 +1,40 @@
+.square {
+  @apply w-14 aspect-square inline-block bg-white relative
+}
+
+.square:not(.square-invert) {
+  @apply group-odd:odd:bg-purple-400 group-even:even:bg-purple-400;
+}
+
+.square-invert {
+  @apply group-even:odd:bg-purple-400 group-odd:even:bg-purple-400;
+}
+
+.valid-move::after {
+  content: "";
+  border-radius: 50%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  display: block;
+  transform: translate(-50%, -50%);
+  width: 20px;
+  height: 20px;
+}
+
+.valid-move::after {
+  background: rgba(50, 50, 50, 0.5);
+}
+
+.capture-move {
+  outline: rgba(255, 0, 0, 0.5) solid 5px;
+  outline-offset: -5px;
+}
+
+.check {
+  background: darkred !important;
+}
+
+.selected {
+  @apply !bg-green-300;
+}
