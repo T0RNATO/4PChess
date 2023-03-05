@@ -1,5 +1,5 @@
 .square {
-  @apply w-14 aspect-square inline-block bg-white relative
+  @apply w-14 aspect-square inline-block bg-white relative;
 }
 
 .square:not(.square-invert) {

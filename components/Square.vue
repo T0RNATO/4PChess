@@ -18,7 +18,7 @@ export default {
   },
   computed: {
     inCheck() {
-      const store = useGameStore(this.$pinia);
+      const store = useGameStore();
       if (this.piece.charAt(0) === "K") {
         return store.check[this.piece.charAt(1)];
       }
@@ -28,7 +28,7 @@ export default {
   },
   methods: {
     clickHandler() {
-      const store = useGameStore(this.$pinia);
+      const store = useGameStore();
       if (this.$el.classList.contains("valid-move") || this.$el.classList.contains("capture-move")) {
         store.movePiece(this.pos);
         store.incrementTurn();

@@ -7,7 +7,7 @@ import {useGameStore} from "@/stores/app";
 export default {
   computed: {
     text: function() {
-      const store = useGameStore(this.$pinia);
+      const store = useGameStore();
       if (store.mated[this.turn]) {
         return "CHECK\nMATED"
       } else {
@@ -22,7 +22,7 @@ export default {
 
 <style scoped>
 .turn-indicator {
-  @apply absolute w-[9rem] h-[9rem] text-center text-2xl text-white font-bold flex flex-col justify-center items-center transition-all
+  @apply absolute w-[9rem] h-[9rem] text-center text-2xl text-white font-bold flex flex-col justify-center items-center transition-all;
 }
 .red {
   @apply bg-red-400 left-0 top-0 rotate-180;

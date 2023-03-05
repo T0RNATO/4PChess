@@ -14,7 +14,7 @@ import { useGameStore } from "@/stores/app";
 
 export default {
     mounted() {
-        const store = useGameStore(this.$pinia);
+        const store = useGameStore();
         if (localStorage.data) {
             const data = JSON.parse(localStorage.data);
             store.setState(data);
@@ -22,7 +22,7 @@ export default {
     },
     computed: {
         selected() {
-            const store = useGameStore(this.$pinia);
+            const store = useGameStore();
             return store.selected;
         }
     }
