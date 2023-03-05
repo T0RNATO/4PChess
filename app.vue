@@ -11,6 +11,7 @@
 
 <script>
 import { useGameStore } from "@/stores/app";
+import { mapState } from "pinia";
 
 export default {
     mounted() {
@@ -21,10 +22,7 @@ export default {
         }
     },
     computed: {
-        selected() {
-            const store = useGameStore();
-            return store.selected;
-        }
+        ...mapState(useGameStore, ["check", "turn", "board", "mated", "selected"]),
     }
 }
 </script>

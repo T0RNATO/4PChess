@@ -46,7 +46,7 @@ export default {
             if (square) {
               for (const move of getMoves(j, i, board).filter(move => move[2] === "capture-move")) {
                 if (board[move[1]][move[0]].charAt(0) === "K") {
-                  store.check(board[move[1]][move[0]].charAt(1));
+                  store.putInCheck(board[move[1]][move[0]].charAt(1));
                 }
               }
             }

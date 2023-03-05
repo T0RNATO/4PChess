@@ -63,7 +63,7 @@ export const useGameStore = defineStore('game', {
                 }
             }
         },
-        check(player) {
+        putInCheck(player) {
             this.check[player] = true;
         },
         clearCheck() {
