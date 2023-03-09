@@ -4,5 +4,12 @@ export default defineNuxtConfig({
         '@pinia/nuxt',
         '@nuxtjs/tailwindcss',
     ],
-    target: 'static'
+    target: 'static',
+    app: {
+        head: {
+            title: "4 Player Chess"
+        },
+        baseURL: "/4PChess/"
+    },
+
 })

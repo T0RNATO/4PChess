@@ -1,5 +1,5 @@
 <template>
-  <div class="modal">
+  <div class="modal" @click.stop="">
     <h1 class="text-4xl font-bold mt-5">Settings</h1>
     <button class="bg-red-500 p-4 rounded-md m-4" @click="resetBoard">Reset Board</button>
   </div>
