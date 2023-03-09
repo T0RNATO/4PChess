@@ -26,6 +26,8 @@ concurrency:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
+    env:
+      NUXT_APP_BASE_URL: /4PChess/
     steps:
       - name: Checkout
         uses: actions/checkout@v2
