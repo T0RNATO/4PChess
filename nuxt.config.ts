@@ -8,5 +8,11 @@ export default defineNuxtConfig({
         head: {
             title: "4 Player Chess"
         }
-    }
+    },
+    postcss: {
+        plugins: {
+            tailwindcss: {},
+            autoprefixer: {},
+        },
+    },
 })
