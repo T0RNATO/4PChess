@@ -13,19 +13,7 @@ export default {
         delete localStorage.data;
         location.reload();
       }
-    },
-    close() {
-      if (this.$el.classList.contains("fadeOut")) {
-        console.log("pain and suffering")
-        this.$emit("closeMenu");
-      }
     }
-  },
-  mounted() {
-    this.$el.addEventListener("animationend", this.close)
-  },
-  destroyed() {
-    this.$el.removeEventListener("animationend", this.close)
   }
 }
 </script>

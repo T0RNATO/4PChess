@@ -22,7 +22,7 @@ export default {
         }
     },
     computed: {
-        ...mapState(useGameStore, ["check", "turn", "board", "mated", "selected"]),
+        ...mapState(useGameStore, ["check", "turn", "board", "mated", "selected", "castle", "highlight"]),
     },
     data() {
         return {
@@ -45,7 +45,9 @@ export default {
             }
         },
         closeMenu() {
-            this.fadeOut = true;
+            if (this.settings) {
+                this.fadeOut = true;
+            }
         },
         toggleMenu(e) {
             if (!this.settings) {

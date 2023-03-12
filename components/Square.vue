@@ -1,13 +1,13 @@
 <template>
-    <div :class="{'square': true, 'check': inCheck, 'selected': selected === pos}" :data-pos="pos" @click="clickHandler">
+    <div :class="classes" :data-pos="String(pos)" @click="clickHandler">
         <Piece :piece="piece" :pos="pos" v-if="piece"/>
     </div>
 </template>
 
-<style src="assets/css/index.css"></style>
+<style src="assets/css/squares.css"></style>
 
 <script>
-import {getNonCheckingMoves, getSquareAtPos, getMoves} from "@/utils/utils";
+import {getNonCheckingMoves, getSquareAtPos, getMoves, arrHasArr} from "@/utils/utils";
 import {useGameStore} from "@/stores/app";
 import {mapState} from "pinia";
 
@@ -24,17 +24,35 @@ export default {
             }
             return false
         },
-        ...mapState(useGameStore, ["selected"])
+        highlightedMoves() {
+            let out = {};
+            for (const [k, v] of Object.entries(this.highlight)) {
+                out["col-" + k] = arrHasArr(v, this.pos);
+            }
+        },
+        classes() {
+            return {
+              'square': true,
+              'check': this.inCheck,
+              'selected': this.pos.every((elem, i) => {return elem === this.selected[i];}),
+              ...this.highlightedMoves
+            }
+        },
+        ...mapState(useGameStore, ["selected", "highlight"])
     },
     methods: {
         clickHandler() {
             const store = useGameStore();
-            if (this.$el.classList.contains("valid-move") || this.$el.classList.contains("capture-move")) {
-                store.movePiece(this.pos);
-                store.incrementTurn();
-                store.selectPiece([]);
+            if (["capture-move", "valid-move", "castle-l", "castle-r"].some((el) => {return this.$el.classList.contains(el)})) {
+                if (this.$el.classList.contains("castle-l")) {
+                    store.movePiece(this.pos, "l");
+                } else if (this.$el.classList.contains("castle-r")) {
+                    store.movePiece(this.pos, "r");
+                } else {
+                    store.movePiece(this.pos);
+                }
                 for (const el of document.querySelectorAll(".square")) {
-                    el.classList.remove("valid-move", "capture-move");
+                    el.classList.remove("valid-move", "capture-move", "castle-r", "castle-l");
                 }
 
                 store.clearCheck()
@@ -74,14 +92,13 @@ export default {
             } else {
                 store.selectPiece([]);
                 for (const el of document.querySelectorAll(".square")) {
-                    el.classList.remove("valid-move", "capture-move");
+                    el.classList.remove("valid-move", "capture-move", "castle-r", "castle-l");
                 }
                 if (this.piece
                     && Number(this.piece.charAt(1)) === store.turn
                 ) {
                     store.selectPiece(this.pos);
                     for (const move of getNonCheckingMoves(this.pos[0], this.pos[1], store.board)) {
-                        console.log(move);
                         getSquareAtPos(move[0], move[1]).classList.add(move[2]);
                     }
                 }

@@ -10,7 +10,7 @@
   @apply group-even:odd:bg-purple-400 group-odd:even:bg-purple-400;
 }
 
-.valid-move::after {
+.valid-move::after, .castle-l::after, .castle-r::after {
   content: "";
   border-radius: 50%;
   position: absolute;
@@ -22,7 +22,7 @@
   height: 20px;
 }
 
-.valid-move::after {
+.valid-move::after, .castle-l::after, .castle-r::after {
   background: rgba(50, 50, 50, 0.5);
 }
 
@@ -35,6 +35,9 @@
   background: darkred !important;
 }
 
-.selected {
-  @apply !bg-green-300;
-}
+.col-0 { @apply !bg-red-400; }
+.col-1 { @apply !bg-blue-300; }
+.col-2 { @apply !bg-yellow-200; }
+.col-3 { @apply !bg-green-300; }
+
+.selected { @apply !bg-fuchsia-300 }
