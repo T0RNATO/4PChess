@@ -17,31 +17,15 @@ export const useGameStore = defineStore('game', {
             "2": false,
             "3": false
         },
-        // board: [
-        //     [null, null, null, "R0","N0","B0","K0","Q0","B0","N0","R0", null, null, null],
-        //     [null, null, null, "P0","P0","P0","P0","P0","P0","P0","P0", null, null, null],
-        //     [null, null, null, "","","","","","","","", null, null, null],
-        //     ["R3","P3","","","","","","","","","","","P1","R1"],
-        //     ["N3","P3","","","","","","","","","","","P1","N1"],
-        //     ["B3","P3","","","","","","","","","","","P1","B1"],
-        //     ["Q3","P3","","","","","","","","","","","P1","K1"],
-        //     ["K3","P3","","","","","","","","","","","P1","Q1"],
-        //     ["B3","P3","","","","","","","","","","","P1","B1"],
-        //     ["N3","P3","","","","","","","","","","","P1","N1"],
-        //     ["R3","P3","","","","","","","","","","","P1","R1"],
-        //     [null, null, null, "","","","","","","","", null, null, null],
-        //     [null, null, null, "P2","P2","P2","P2","P2","P2","P2","P2", null, null, null],
-        //     [null, null, null, "R2","N2","B2","Q2","K2","B2","N2","R2", null, null, null],
-        // ],
         board: [
             [null, null, null, "R0","N0","B0","K0","Q0","B0","N0","R0", null, null, null],
-            [null, null, null, "P0","P0","P0","P0","","P0","P0","P0", null, null, null],
+            [null, null, null, "P0","P0","P0","P0","P0","P0","P0","P0", null, null, null],
             [null, null, null, "","","","","","","","", null, null, null],
             ["R3","P3","","","","","","","","","","","P1","R1"],
-            ["N3","P3","","","","","","","","","","","P1","P1"],
-            ["B3","P3","","","","","","","","","","","P1","P1"],
-            ["Q3","P3","","","","","","","","","","","","K1"],
-            ["K3","P3","","","","","","","","","","","P1","P1"],
+            ["N3","P3","","","","","","","","","","","P1","N1"],
+            ["B3","P3","","","","","","","","","","","P1","B1"],
+            ["Q3","P3","","","","","","","","","","","P1","K1"],
+            ["K3","P3","","","","","","","","","","","P1","Q1"],
             ["B3","P3","","","","","","","","","","","P1","B1"],
             ["N3","P3","","","","","","","","","","","P1","N1"],
             ["R3","P3","","","","","","","","","","","P1","R1"],
@@ -60,6 +44,9 @@ export const useGameStore = defineStore('game', {
             1: {l: true, r: true},
             2: {l: true, r: true},
             3: {l: true, r: true}
+        },
+        settings: {
+            theme: "purple"
         }
     }),
     actions: {
@@ -120,7 +107,6 @@ export const useGameStore = defineStore('game', {
                     this.turn = 0;
                 }
             }
-            this.highlight[this.turn] = [];
         },
         putInCheck(player) {
             this.check[player] = true;
@@ -134,12 +120,11 @@ export const useGameStore = defineStore('game', {
             };
         },
         mate(player) {
-            this.mated[player] = true;
+            this.mated[String(player)] = true;
             for (const [i, row] of this.board.entries()) {
                 for (const [j, square] of row.entries()) {
-                    console.log(square, player)
-                    if (square && square.charAt(1) === player) {
-                        this.board[j][i] = "";
+                    if (square && Number(square.charAt(1)) === player) {
+                        this.board[i][j] = "";
                     }
                 }
             }

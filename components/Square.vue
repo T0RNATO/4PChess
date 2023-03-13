@@ -29,6 +29,7 @@ export default {
             for (const [k, v] of Object.entries(this.highlight)) {
                 out["col-" + k] = arrHasArr(v, this.pos);
             }
+            return out;
         },
         classes() {
             return {

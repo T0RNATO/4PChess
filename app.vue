@@ -1,11 +1,11 @@
 <template>
-    <div @click="closeMenu">
+    <div @click="closeMenu" id="root" :class="[settings.theme]">
         <img src="@/assets/images/settings.svg" class="absolute m-2 right-0 w-8 hover:rotate-45 transition-all cursor-pointer"
              @click="toggleMenu" alt="Settings Button"/>
         <div class="w-full flex justify-center h-[100vh] items-center">
             <Game :selected="selected"/>
         </div>
-        <SettingsMenu v-if="settings" :class="{fadeOut: fadeOut}" v-animationend="anEnd"/>
+        <SettingsMenu v-if="settingsMenu" :class="{fadeOut: fadeOut}" v-animationend="anEnd"/>
     </div>
 </template>
 
@@ -22,11 +22,11 @@ export default {
         }
     },
     computed: {
-        ...mapState(useGameStore, ["check", "turn", "board", "mated", "selected", "castle", "highlight"]),
+        ...mapState(useGameStore, ["check", "turn", "board", "mated", "selected", "castle", "highlight", "settings"]),
     },
     data() {
         return {
-            settings: false,
+            settingsMenu: false,
             fadeOut: false,
         }
     },
@@ -41,18 +41,18 @@ export default {
         anEnd() {
             if (this.fadeOut) {
                 this.fadeOut = false;
-                this.settings = false;
+                this.settingsMenu = false;
             }
         },
         closeMenu() {
-            if (this.settings) {
+            if (this.settingsMenu) {
                 this.fadeOut = true;
             }
         },
         toggleMenu(e) {
-            if (!this.settings) {
+            if (!this.settingsMenu) {
                 e.stopPropagation();
-                this.settings = true;
+                this.settingsMenu = true;
             }
         }
     }
@@ -65,5 +65,13 @@ export default {
 @tailwind utilities;
 body {
     background-color: #262626;
+    overflow-x: hidden;
 }
+#root.blue {--theme: #70acf9;}
+#root.green {--theme: #579355;}
+#root.grey {--theme: #bcbcbc;}
+#root.orange {--theme: #e6936e;}
+#root.brown {--theme: #7d5a4c;}
+#root.red {--theme: #ff6e6e;}
+#root.purple {--theme: #c084fc;}
 </style>

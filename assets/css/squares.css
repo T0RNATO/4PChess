@@ -1,13 +1,13 @@
 .square {
-  @apply w-14 aspect-square inline-block bg-white relative;
+  @apply w-14 aspect-square inline-block bg-white relative transition-colors;
 }
 
 .square:not(.square-invert) {
-  @apply group-odd:odd:bg-purple-400 group-even:even:bg-purple-400;
+  @apply group-odd:odd:bg-[var(--theme)] group-even:even:bg-[var(--theme)];
 }
 
 .square-invert {
-  @apply group-even:odd:bg-purple-400 group-odd:even:bg-purple-400;
+  @apply group-even:odd:bg-[var(--theme)] group-odd:even:bg-[var(--theme)];
 }
 
 .valid-move::after, .castle-l::after, .castle-r::after {
@@ -18,8 +18,7 @@
   left: 50%;
   display: block;
   transform: translate(-50%, -50%);
-  width: 20px;
-  height: 20px;
+  animation: appear 0.1s cubic-bezier(.6,.17,.66,1.72) forwards;
 }
 
 .valid-move::after, .castle-l::after, .castle-r::after {
@@ -41,3 +40,14 @@
 .col-3 { @apply !bg-green-300; }
 
 .selected { @apply !bg-fuchsia-300 }
+
+@keyframes appear {
+  0% {
+    width: 0;
+    height: 0;
+  }
+  100% {
+    width: 20px;
+    height: 20px;
+  }
+}
