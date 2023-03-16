@@ -6,7 +6,8 @@ export default defineNuxtConfig({
     app: {
         head: {
             title: "4 Player Chess"
-        }
+        },
+        baseURL: '/'
     },
     postcss: {
         plugins: {
