@@ -9,10 +9,10 @@
                 :piece="piece"
                 :pos="row.length === 14 ? [j, i] : [j + 3, i]" />
       </div>
-    <TurnIndicator :class="{red: true, disabled: turn !== 0}" turn=0 />
-    <TurnIndicator :class="{blue: true, disabled: turn !== 1}" turn=1 />
-    <TurnIndicator :class="{yellow: true, disabled: turn !== 2}" turn=2 />
-    <TurnIndicator :class="{green: true, disabled: turn !== 3}" turn=3 />
+<!--    <TurnIndicator :class="{red: true, disabled: turn !== 0}" turn=0 />-->
+<!--    <TurnIndicator :class="{blue: true, disabled: turn !== 1}" turn=1 />-->
+<!--    <TurnIndicator :class="{yellow: true, disabled: turn !== 2}" turn=2 />-->
+<!--    <TurnIndicator :class="{green: true, disabled: turn !== 3}" turn=3 />-->
   </div>
 </template>
 

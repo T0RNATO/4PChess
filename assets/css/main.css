@@ -21,17 +21,17 @@ body {
     /*background-image: linear-gradient(calc(var(--turn) * 90deg + 180deg), #262626, #262626 3px, transparent 3px, transparent 6px, #262626 6px);*/
     /*background-size: 20px 20px;*/
     /*animation: 60s linear 0s infinite running slide;*/
-    background-image: radial-gradient(transparent 0, transparent 5px, #262626 5px, transparent), radial-gradient(transparent 0, transparent 5px, #262626 5px, transparent);
+    background-image: radial-gradient(transparent 20%, #262626 20%, transparent 100%), radial-gradient(transparent 20%, #262626 20%, transparent 100%);
     background-size: 30px 30px;
-    background-position: 0 0, 5px 5px;
-    /*animation: 60s linear 0s infinite running slide;*/
+    background-position: 0 0, 15px 15px;
+    animation: 60s linear 0s infinite running slide;
 }
 @keyframes slide {
     from {
-        background-position: 100% 100%;
+        background-position: 0 0, 15px 15px;
     }
     to {
-        background-position: 0 0;
+        background-position: 100% 100%, calc(15px + 100%) calc(15px + 100%);
     }
 }
 #root.blue {--theme: var(--blue);}

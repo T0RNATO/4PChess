@@ -37,6 +37,6 @@ export default {
   @apply bg-green-400 left-0 top-[calc(100%-9rem)] rotate-90;
 }
 div.disabled {
-  @apply bg-[#323232] text-[#262626];
+  @apply bg-transparent text-transparent;
 }
 </style>
