@@ -7,7 +7,6 @@ export default defineNuxtConfig({
         head: {
             title: "4 Player Chess"
         },
-        baseURL: '/'
     },
     postcss: {
         plugins: {
@@ -15,4 +14,5 @@ export default defineNuxtConfig({
             autoprefixer: {},
         },
     },
+    target: 'static',
 })
