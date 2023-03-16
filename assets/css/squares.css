@@ -30,14 +30,14 @@
   outline-offset: -5px;
 }
 
-.check {
-  background: darkred !important;
-}
-
 .col-0 { @apply !bg-red-400; }
 .col-1 { @apply !bg-blue-300; }
 .col-2 { @apply !bg-yellow-200; }
 .col-3 { @apply !bg-green-300; }
+
+.check {
+  background: darkred !important;
+}
 
 .selected { @apply !bg-fuchsia-300 }
 

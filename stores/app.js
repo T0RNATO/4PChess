@@ -128,6 +128,7 @@ export const useGameStore = defineStore('game', {
                     }
                 }
             }
+            this.highlight[player] = [];
         },
         setState(newState) {
             for (const key in newState) {

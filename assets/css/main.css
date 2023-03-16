@@ -1,0 +1,43 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+body {
+    background-color: #262626;
+    overflow-x: hidden;
+}
+.body {
+    --turn: 0;
+    --turn-color: #be2424;
+    background-image: linear-gradient(calc(var(--turn) * 90deg + 180deg), var(--turn-color), #262626, #262626);
+}
+#root {
+    --blue: #70acf9;
+    --green: #579355;
+    --grey: #bcbcbc;
+    --orange: #f1aa8a;
+    --brown: #a68b6e;
+    --red: #ff6e6e;
+    --purple: #c084fc;
+    /*background-image: linear-gradient(calc(var(--turn) * 90deg + 180deg), #262626, #262626 3px, transparent 3px, transparent 6px, #262626 6px);*/
+    /*background-size: 20px 20px;*/
+    /*animation: 60s linear 0s infinite running slide;*/
+    background-image: radial-gradient(transparent 0, transparent 5px, #262626 5px, transparent), radial-gradient(transparent 0, transparent 5px, #262626 5px, transparent);
+    background-size: 30px 30px;
+    background-position: 0 0, 5px 5px;
+    /*animation: 60s linear 0s infinite running slide;*/
+}
+@keyframes slide {
+    from {
+        background-position: 100% 100%;
+    }
+    to {
+        background-position: 0 0;
+    }
+}
+#root.blue {--theme: var(--blue);}
+#root.green {--theme: var(--green);}
+#root.grey {--theme: var(--grey);}
+#root.orange {--theme: var(--orange);}
+#root.brown {--theme: var(--brown);}
+#root.red {--theme: var(--red);}
+#root.purple {--theme: var(--purple);}

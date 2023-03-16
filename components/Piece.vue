@@ -1,16 +1,16 @@
 <template>
-  <img :src="rotated[piece]"/>
+  <img :src="rotated[piece]" draggable="false"/>
 </template>
 
 <script setup>
-import { rotated } from "../utils/utils"
+import { rotated } from "~/utils/utils"
 </script>
 
 <script>
 export default {
-  props: {
-    piece: String,
-    pos: Array
-  }
+    props: {
+        piece: String,
+        pos: Array
+    }
 }
 </script>

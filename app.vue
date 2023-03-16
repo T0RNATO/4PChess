@@ -1,4 +1,5 @@
 <template>
+    <div class="body" :style="{'--turn': turn, '--turn-color': ['#8c1818', '#286283', '#8f7f1f', '#40732f'][turn]}">
     <div @click="closeMenu" id="root" :class="[settings.theme]">
         <img src="@/assets/images/settings.svg" class="absolute m-2 right-0 w-8 hover:rotate-45 transition-all cursor-pointer"
              @click="toggleMenu" alt="Settings Button"/>
@@ -6,6 +7,7 @@
             <Game :selected="selected"/>
         </div>
         <SettingsMenu v-if="settingsMenu" :class="{fadeOut: fadeOut}" v-animationend="anEnd"/>
+    </div>
     </div>
 </template>
 
@@ -59,19 +61,4 @@ export default {
 }
 </script>
 
-<style>
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-body {
-    background-color: #262626;
-    overflow-x: hidden;
-}
-#root.blue {--theme: #70acf9;}
-#root.green {--theme: #579355;}
-#root.grey {--theme: #bcbcbc;}
-#root.orange {--theme: #e6936e;}
-#root.brown {--theme: #7d5a4c;}
-#root.red {--theme: #ff6e6e;}
-#root.purple {--theme: #c084fc;}
-</style>
+<style src="/assets/css/main.css"></style>
