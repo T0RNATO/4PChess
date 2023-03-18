@@ -1,6 +1,6 @@
 <template>
     <div :class="classes" :data-pos="String(pos)" @click="clickHandler">
-        <Piece :piece="piece" :pos="pos" v-if="piece"/>
+        <img :src="rotated[piece]" draggable="false" v-if="piece" :class="{mated_piece: mated[piece.charAt(1)]}"/>
     </div>
 </template>
 
@@ -39,7 +39,7 @@ export default {
               ...this.highlightedMoves
             }
         },
-        ...mapState(useGameStore, ["selected", "highlight"])
+        ...mapState(useGameStore, ["selected", "highlight", "mated", "turn"])
     },
     methods: {
         clickHandler() {
@@ -62,9 +62,12 @@ export default {
                 for (const [i,row] of board.entries()) {
                     for (const [j, square] of row.entries()) {
                         // If piece in square
-                        if (square) {
+                        if (square && !store.mated[square.charAt(1)]) {
+                            // Loop through capturing moves
                             for (const move of getMoves(j, i, board).filter(move => move[2] === "capture-move")) {
+                                // If the move can "capture" the king,
                                 if (board[move[1]][move[0]].charAt(0) === "K") {
+                                    // Put player in check
                                     store.putInCheck(board[move[1]][move[0]].charAt(1));
                                 }
                             }
@@ -77,18 +80,15 @@ export default {
                 for (const [i,row] of board.entries()) {
                     for (const [j, square] of row.entries()) {
                         if (square && square.charAt(1) === String(store.turn)) {
-                            if (getNonCheckingMoves(j, i, board).length) {
+                            if (getNonCheckingMoves(j, i, board, store).length) {
                                 mate = false;
                             }
                         }
                     }
                 }
                 if (mate) {
-                    store.mate(Number(store.turn));
-                    store.incrementTurn();
+                    store.mate(store.turn);
                 }
-
-                localStorage.data = JSON.stringify(store);
 
             } else {
                 store.selectPiece([]);
@@ -99,7 +99,7 @@ export default {
                     && Number(this.piece.charAt(1)) === store.turn
                 ) {
                     store.selectPiece(this.pos);
-                    for (const move of getNonCheckingMoves(this.pos[0], this.pos[1], store.board)) {
+                    for (const move of getNonCheckingMoves(this.pos[0], this.pos[1], store.board, store)) {
                         getSquareAtPos(move[0], move[1]).classList.add(move[2]);
                     }
                 }
@@ -107,4 +107,8 @@ export default {
         }
     }
 }
+</script>
+
+<script setup>
+import { rotated } from "~/utils/utils"
 </script>

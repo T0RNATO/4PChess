@@ -119,6 +119,7 @@ export const useGameStore = defineStore('game', {
                     this.turn = 0;
                 }
             }
+            localStorage.data = JSON.stringify(this);
         },
         putInCheck(player) {
             this.check[player] = true;
@@ -133,14 +134,8 @@ export const useGameStore = defineStore('game', {
         },
         mate(player) {
             this.mated[String(player)] = true;
-            for (const [i, row] of this.board.entries()) {
-                for (const [j, square] of row.entries()) {
-                    if (square && Number(square.charAt(1)) === player) {
-                        this.board[i][j] = "";
-                    }
-                }
-            }
             this.highlight[player] = [];
+            this.incrementTurn();
         },
         setState(newState) {
             for (const key in newState) {
@@ -152,6 +147,9 @@ export const useGameStore = defineStore('game', {
         },
         timer() {
             this.time[this.turn]--;
+            if (this.time[this.turn] === 0) {
+                this.mate(this.turn);
+            }
         }
     },
 })

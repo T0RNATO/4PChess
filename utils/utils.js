@@ -125,7 +125,7 @@ function pawnMove(square1XY, square2XY, tpos, xy, pm, board, activePlayer) {
     }
     return pm;
 }
-export function getNonCheckingMoves(xPos, yPos, board) {
+export function getNonCheckingMoves(xPos, yPos, board, store) {
     // For each possible move of the clicked piece
     let moves = [];
     for (const move of getMoves(xPos, yPos, board)) {
@@ -140,7 +140,7 @@ export function getNonCheckingMoves(xPos, yPos, board) {
         for (const [i, row] of testBoard.entries()) {
             for (const [j, square] of row.entries()) {
                 // If there's a piece in the square
-                if (square) {
+                if (square && !store.mated[square.charAt(1)]) {
                     // Loop through the capturing moves it can make
                     for (const capture of getMoves(j, i, testBoard).filter(move => move[2] === "capture-move")) {
                         // If that capturing move could "capture" the king
@@ -209,7 +209,7 @@ export function castleRook(side, state) {
     }
 }
 
-const turnColours = [0x8c1818, 0x286283, 0x8f7f1f, 0x40732f];
+const turnColours = [0x8c1818, 0x286283, 0x8f7f1f, 0x40732f, 0x8c1818];
 let lerpR = 0;
 
 /**
@@ -222,6 +222,9 @@ export function lerpBg(el, turn1, turn2) {
     const startC = turnColours[turn1];
     const endC = turnColours[turn2];
     const hex = "#" + lerpColour(startC, endC, lerpR).toString(16)
+    if (turn2 === 0) {
+        turn2 = 4;
+    }
     const turn = lerp(turn1, turn2, lerpR)
     el.style.setProperty("--turn-color", hex)
     el.style.setProperty("--turn", turn)
@@ -231,6 +234,9 @@ export function lerpBg(el, turn1, turn2) {
         })
     } else {
         lerpR = 0;
+        if (turn2 === 4) {
+            el.style.setProperty("--turn", 0)
+        }
     }
 }
 /**

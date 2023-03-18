@@ -51,3 +51,7 @@
     height: 20px;
   }
 }
+
+.mated_piece {
+  filter: grayscale(1);
+}
