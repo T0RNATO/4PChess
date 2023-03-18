@@ -12,11 +12,11 @@ body {
 }
 #root {
     --blue: #70acf9;
-    --green: #579355;
+    --green: #77b975;
     --grey: #bcbcbc;
-    --orange: #f1aa8a;
+    --orange: #cc754f;
     --brown: #a68b6e;
-    --red: #ff6e6e;
+    --red: #ef99f5;
     --purple: #c084fc;
     background-image: radial-gradient(transparent 20%, #262626 20%, transparent 100%), radial-gradient(transparent 20%, #262626 20%, transparent 100%);
     background-size: 30px 30px;

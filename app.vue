@@ -62,7 +62,7 @@ export default {
     watch: {
         turn: {
             handler(n, o){
-                lerpBg(document.querySelector("#body"), o, n, 1);
+                lerpBg(document.querySelector("#body"), o, n);
             }
         }
     }

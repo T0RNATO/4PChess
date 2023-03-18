@@ -12,14 +12,18 @@ import {useGameStore} from "@/stores/app";
 import {mapState} from "pinia";
 export default {
     computed: {
-        ...mapState(useGameStore, ["time", "turn"]),
+        ...mapState(useGameStore, ["time", "turn", "mated"]),
         playerTime() {
-            const mins = Math.floor(this.time[this.player] / 60);
-            let secs = this.time[this.player] % 60
-            if (String(secs).length === 1) {
-                secs = "0" + secs;
+            if (!this.mated[this.player]) {
+                const mins = Math.floor(this.time[this.player] / 60);
+                let secs = this.time[this.player] % 60
+                if (String(secs).length === 1) {
+                    secs = "0" + secs;
+                }
+                return mins + ":" + secs;
+            } else {
+                return "Mated"
             }
-            return mins + ":" + secs;
         }
     },
     props: {
