@@ -47,7 +47,14 @@ export const useGameStore = defineStore('game', {
         },
         settings: {
             theme: "purple"
-        }
+        },
+        time: {
+            0: 600,
+            1: 600,
+            2: 600,
+            3: 600
+        },
+        gs: false
     }),
     actions: {
         /**
@@ -92,6 +99,11 @@ export const useGameStore = defineStore('game', {
 
             this.incrementTurn();
             this.selectPiece([]);
+
+            if (!this.gs) {
+                setInterval(this.timer, 1000)
+            }
+            this.gs = true;
         },
         selectPiece(pos) {
             this.selected = pos;
@@ -134,6 +146,12 @@ export const useGameStore = defineStore('game', {
             for (const key in newState) {
                 this[key] = newState[key];
             }
+            if (newState.gs) {
+                setInterval(this.timer, 1000);
+            }
+        },
+        timer() {
+            this.time[this.turn]--;
         }
     },
 })

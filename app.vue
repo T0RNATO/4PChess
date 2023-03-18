@@ -1,5 +1,5 @@
 <template>
-    <div class="body" :style="{'--turn': turn, '--turn-color': ['#8c1818', '#286283', '#8f7f1f', '#40732f'][turn]}">
+    <div id="body">
     <div @click="closeMenu" id="root" :class="[settings.theme]">
         <img src="@/assets/images/settings.svg" class="absolute m-2 right-0 w-8 hover:rotate-45 transition-all cursor-pointer"
              @click="toggleMenu" alt="Settings Button"/>
@@ -14,6 +14,7 @@
 <script>
 import { useGameStore } from "@/stores/app";
 import { mapState } from "pinia";
+import { lerpBg } from "~/utils/utils";
 
 export default {
     mounted() {
@@ -29,7 +30,7 @@ export default {
     data() {
         return {
             settingsMenu: false,
-            fadeOut: false,
+            fadeOut: false
         }
     },
     directives: {
@@ -55,6 +56,13 @@ export default {
             if (!this.settingsMenu) {
                 e.stopPropagation();
                 this.settingsMenu = true;
+            }
+        }
+    },
+    watch: {
+        turn: {
+            handler(n, o){
+                lerpBg(document.querySelector("#body"), o, n, 1);
             }
         }
     }

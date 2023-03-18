@@ -9,10 +9,10 @@
                 :piece="piece"
                 :pos="row.length === 14 ? [j, i] : [j + 3, i]" />
       </div>
-<!--    <TurnIndicator :class="{red: true, disabled: turn !== 0}" turn=0 />-->
-<!--    <TurnIndicator :class="{blue: true, disabled: turn !== 1}" turn=1 />-->
-<!--    <TurnIndicator :class="{yellow: true, disabled: turn !== 2}" turn=2 />-->
-<!--    <TurnIndicator :class="{green: true, disabled: turn !== 3}" turn=3 />-->
+      <PlayerInfo :player="0" class="player-0"/>
+      <PlayerInfo :player="1" class="player-1"/>
+      <PlayerInfo :player="2" class="player-2"/>
+      <PlayerInfo :player="3" class="player-3"/>
   </div>
 </template>
 
@@ -25,10 +25,12 @@
 <script>
 import {useGameStore} from "@/stores/app";
 import {mapState} from "pinia";
+import PlayerInfo from "~/components/PlayerInfo.vue";
 
 export default {
-  computed: {
-    ...mapState(useGameStore, ["board", "turn"]),
-  }
+    components: {PlayerInfo},
+    computed: {
+        ...mapState(useGameStore, ["board", "turn"]),
+    }
 }
 </script>

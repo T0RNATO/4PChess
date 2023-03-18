@@ -5,7 +5,7 @@ body {
     background-color: #262626;
     overflow-x: hidden;
 }
-.body {
+#body {
     --turn: 0;
     --turn-color: #be2424;
     background-image: linear-gradient(calc(var(--turn) * 90deg + 180deg), var(--turn-color), #262626, #262626);
@@ -18,20 +18,17 @@ body {
     --brown: #a68b6e;
     --red: #ff6e6e;
     --purple: #c084fc;
-    /*background-image: linear-gradient(calc(var(--turn) * 90deg + 180deg), #262626, #262626 3px, transparent 3px, transparent 6px, #262626 6px);*/
-    /*background-size: 20px 20px;*/
-    /*animation: 60s linear 0s infinite running slide;*/
     background-image: radial-gradient(transparent 20%, #262626 20%, transparent 100%), radial-gradient(transparent 20%, #262626 20%, transparent 100%);
     background-size: 30px 30px;
     background-position: 0 0, 15px 15px;
-    animation: 60s linear 0s infinite running slide;
+    animation: 1.5s linear 0s infinite slide;
 }
 @keyframes slide {
-    from {
+    0% {
         background-position: 0 0, 15px 15px;
     }
-    to {
-        background-position: 100% 100%, calc(15px + 100%) calc(15px + 100%);
+    100% {
+        background-position: 15px 15px, 30px 30px;
     }
 }
 #root.blue {--theme: var(--blue);}
