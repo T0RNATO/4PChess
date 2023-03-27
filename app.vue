@@ -52,17 +52,17 @@ export default {
                 this.fadeOut = true;
             }
         },
-        toggleMenu(e) {
+        toggleMenu(event) {
             if (!this.settingsMenu) {
-                e.stopPropagation();
+                event.stopPropagation();
                 this.settingsMenu = true;
             }
         }
     },
     watch: {
         turn: {
-            handler(n, o){
-                lerpBg(document.querySelector("#body"), o, n);
+            handler(newTurnValue, oldTurnValue){
+                lerpBg(document.querySelector("#body"), oldTurnValue, newTurnValue);
             }
         }
     }

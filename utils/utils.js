@@ -1,32 +1,33 @@
 import { useGameStore } from "~/stores/app";
 
-export function getMoves(xPos, yPos, board) {
+export function getMoves(xPositionOfMovingPiece, yPositionOfMovingPiece, board) {
     const store = useGameStore();
 
-    const tpos = [xPos, yPos];
-    const activeType = board[yPos][xPos].charAt(0);
-    const activePlayer = board[yPos][xPos].charAt(1);
-    let directions = [];
+    const movingPiece = board[yPositionOfMovingPiece][xPositionOfMovingPiece]
+    const typeOfMovingPiece = movingPiece.charAt(0);
+    const ownerOfMovingPiece = movingPiece.charAt(1);
+
+    let QRBmovingDirections = [];
     let possibleMoves = [];
 
     // QUEEN, ROOK, AND BISHOP MOVES
-    switch(activeType) {
+    switch(typeOfMovingPiece) {
         case "Q": // fallthrough
         case "B": // fallthrough
-            directions = [[1, 1], [1, -1], [-1, -1], [-1, 1]];
-            if (activeType === "B") {
+            QRBmovingDirections = [[1, 1], [1, -1], [-1, -1], [-1, 1]];
+            if (typeOfMovingPiece === "B") {
                 break;
             }
         case "R":
-            directions = directions.concat([[0, 1], [0, -1], [-1, 0], [1, 0]]);
+            QRBmovingDirections = QRBmovingDirections.concat([[0, 1], [0, -1], [-1, 0], [1, 0]]);
             break;
     }
-    if (activeType === "Q" || activeType === "R" || activeType === "B") {
-        for (const direction of directions) {
+    if (typeOfMovingPiece === "Q" || typeOfMovingPiece === "R" || typeOfMovingPiece === "B") {
+        for (const direction of QRBmovingDirections) {
             let i = 1;
             while (true) {
-                const x = tpos[0] + direction[0] * i;
-                const y = tpos[1] + direction[1] * i;
+                const x = xPositionOfMovingPiece + direction[0] * i;
+                const y = yPositionOfMovingPiece + direction[1] * i;
 
                 if (x >= 14 || y >= 14 || x < 0 || y < 0) break;
 
@@ -36,10 +37,10 @@ export function getMoves(xPos, yPos, board) {
 
                 if (piece === "") {
                     possibleMoves.push([x, y, "valid-move"]);
-                } else if (piece.charAt(1) !== activePlayer) {
+                } else if (piece.charAt(1) !== ownerOfMovingPiece) {
                     possibleMoves.push([x, y, "capture-move"]);
                     break;
-                } else if (piece.charAt(1) === activePlayer) {
+                } else if (piece.charAt(1) === ownerOfMovingPiece) {
                     break;
                 }
                 i++;
@@ -48,86 +49,106 @@ export function getMoves(xPos, yPos, board) {
     }
 
     // PAWN MOVES
-    if (activeType === "P") {
-        const player = Number(activePlayer);
+    if (typeOfMovingPiece === "P") {
+        const player = Number(ownerOfMovingPiece);
         if (player === 0 || player === 2) {
-            possibleMoves = pawnMove([tpos[0], tpos[1] - player + 1],
-                [tpos[0], tpos[1] - 2 * (player - 1)],
-                tpos, 1, possibleMoves, board, activePlayer);
+            possibleMoves = pawnMove([xPositionOfMovingPiece, yPositionOfMovingPiece - player + 1],
+                [xPositionOfMovingPiece, yPositionOfMovingPiece - 2 * (player - 1)],
+                [xPositionOfMovingPiece, yPositionOfMovingPiece], 1, possibleMoves, board, ownerOfMovingPiece);
 
         } else if (player === 1 || player === 3) {
-            possibleMoves = pawnMove([tpos[0] + player - 2, tpos[1]],
-                [tpos[0] + 2 * (player - 2), tpos[1]],
-                tpos, 0, possibleMoves, board, activePlayer);
+            possibleMoves = pawnMove([xPositionOfMovingPiece + player - 2, yPositionOfMovingPiece],
+                [xPositionOfMovingPiece + 2 * (player - 2), yPositionOfMovingPiece],
+                [xPositionOfMovingPiece, yPositionOfMovingPiece], 0, possibleMoves, board, ownerOfMovingPiece);
         }
     }
 
     // HORSEY + KING MOVES
     let moves = [];
-    if (activeType === "K") {
+    if (typeOfMovingPiece === "K") {
         moves = [[1, 1], [1, -1], [-1, -1], [-1, 1], [0, 1], [0, -1], [-1, 0], [1, 0]];
-    } else if (activeType === "N") {
+    } else if (typeOfMovingPiece === "N") {
         moves = [[1, 2], [2, 1], [-1, 2], [-2, 1], [1, -2], [2, -1], [-1, -2], [-2, -1]];
     }
     for (const m of moves) {
-        const pieceXY = [tpos[0] + m[0], tpos[1] + m[1]]
+        const pieceXY = [xPositionOfMovingPiece + m[0], yPositionOfMovingPiece + m[1]]
         if (pieceXY.every((coord) => coord >= 0 && coord < 14)) {
-            const piece = board[tpos[1] + m[1]][tpos[0] + m[0]];
-            if ([null, undefined].every((e) => e !== piece) && piece.charAt(1) !== activePlayer) {
-                possibleMoves.push([tpos[0] + m[0], tpos[1] + m[1], piece ? "capture-move" : "valid-move"]);
+            const piece = board[yPositionOfMovingPiece + m[1]][xPositionOfMovingPiece + m[0]];
+            if ([null, undefined].every((e) => e !== piece) && piece.charAt(1) !== ownerOfMovingPiece) {
+                possibleMoves.push([xPositionOfMovingPiece + m[0], yPositionOfMovingPiece + m[1], piece ? "capture-move" : "valid-move"]);
             }
         }
     }
 
     // CASTLING
-    if (activeType === "K") {
-        if (activePlayer === "0" && store.castle["0"].l && !board[0][7] && !board[0][8] && !board[0][9]) {
+    // (awful code, disregard lmao)
+    if (typeOfMovingPiece === "K") {
+        if (ownerOfMovingPiece === "0" && store.castle["0"].l && !board[0][7] && !board[0][8] && !board[0][9]) {
             possibleMoves.push([8, 0, "castle-l"])}
-        if (activePlayer === "0" && store.castle["0"].r && !board[0][4] && !board[0][5]) {
+        if (ownerOfMovingPiece === "0" && store.castle["0"].r && !board[0][4] && !board[0][5]) {
             possibleMoves.push([4, 0, "castle-r"])}
 
-        if (activePlayer === "1" && store.castle["1"].l && !board[7][13] && !board[8][13] && !board[9][13]) {
+        if (ownerOfMovingPiece === "1" && store.castle["1"].l && !board[7][13] && !board[8][13] && !board[9][13]) {
             possibleMoves.push([13, 8, "castle-l"])}
-        if (activePlayer === "1" && store.castle["1"].r && !board[5][13] && !board[4][13]) {
+        if (ownerOfMovingPiece === "1" && store.castle["1"].r && !board[5][13] && !board[4][13]) {
             possibleMoves.push([13, 4, "castle-r"])}
 
-        if (activePlayer === "2" && store.castle["2"].l && !board[13][4] && !board[13][5] && !board[13][6]) {
+        if (ownerOfMovingPiece === "2" && store.castle["2"].l && !board[13][4] && !board[13][5] && !board[13][6]) {
             possibleMoves.push([5, 13, "castle-l"])}
-        if (activePlayer === "2" && store.castle["2"].r && !board[13][8] && !board[13][9]) {
+        if (ownerOfMovingPiece === "2" && store.castle["2"].r && !board[13][8] && !board[13][9]) {
             possibleMoves.push([9, 13, "castle-r"])}
 
-        if (activePlayer === "3" && store.castle["3"].l && !board[6][0] && !board[5][0] && !board[4][0]) {
+        if (ownerOfMovingPiece === "3" && store.castle["3"].l && !board[6][0] && !board[5][0] && !board[4][0]) {
             possibleMoves.push([0, 5, "castle-l"])}
-        if (activePlayer === "3" && store.castle["3"].r && !board[8][0] && !board[9][0]) {
+        if (ownerOfMovingPiece === "3" && store.castle["3"].r && !board[8][0] && !board[9][0]) {
             possibleMoves.push([0, 9, "castle-r"])}
     }
 
     return possibleMoves;
 }
-function pawnMove(square1XY, square2XY, tpos, xy, pm, board, activePlayer) {
-    const capture1XY = [xy ? square1XY[0] + 1 : square1XY[0], xy ? square1XY[1] : square1XY[1] + 1];
-    const capture2XY = [xy ? square1XY[0] - 1 : square1XY[0], xy ? square1XY[1] : square1XY[1] - 1];
-    const square1P = board[square1XY[1]][square1XY[0]]
-    const square2P = board[square2XY[1]][square2XY[0]]
+function pawnMove(possiblePawnMove1, possiblePawnMove2, positionOfPawn, xy, possibleMoves, board, ownerOfPawn) {
+
+    // Create shallow copies of coordinates of the pawn move
+    let possibleCapture1 = possiblePawnMove1.slice();
+    let possibleCapture2 = possiblePawnMove1.slice();
+
+    // Move those capture coordinates to either side
+    possibleCapture1[Number(!xy)]--;
+    possibleCapture2[Number(!xy)]++;
+
+    // Get the pieces in the possible movement squares
+    const square1P = board[possiblePawnMove1[1]][possiblePawnMove1[0]]
+    const square2P = board[possiblePawnMove2[1]][possiblePawnMove2[0]]
+
+    // If there's no piece in the first possible square,
     if (square1P === "") {
-        pm.push([square1XY[0], square1XY[1], "valid-move"]);
-        if ((tpos[xy] === 12 || tpos[xy] === 1) && square2P === "") {
-            pm.push([square2XY[0], square2XY[1], "valid-move"]);
+        // Add that square to the possible moves
+        possibleMoves.push([possiblePawnMove1[0], possiblePawnMove1[1], "valid-move"]);
+        // If the pawn hasn't moved yet + 2nd square is empty
+        if ((positionOfPawn[xy] === 12 || positionOfPawn[xy] === 1) && square2P === "") {
+            // Add the second square to the valid moves
+            possibleMoves.push([possiblePawnMove2[0], possiblePawnMove2[1], "valid-move"]);
         }
     }
-    if (capture1XY.every((coord) => coord >= 0 && coord < 14)) {
-        const capture1P = board[capture1XY[1]][capture1XY[0]]
-        if ([null, undefined, ""].every((e) => e !== capture1P) && capture1P.charAt(1) !== activePlayer) {
-            pm.push([capture1XY[0], capture1XY[1], "capture-move"]);
+    // If the capture is inside the board (prevent IndexOutOfBounds)
+    if (possibleCapture1.every((coord) => coord >= 0 && coord < 14)) {
+        // Get the piece in that square
+        const capture1P = board[possibleCapture1[1]][possibleCapture1[0]]
+
+        // If there's a piece in the square, and it's not yours
+        if ([null, undefined, ""].every((e) => e !== capture1P) && capture1P.charAt(1) !== ownerOfPawn) {
+            // Add that to the valid moves
+            possibleMoves.push(possibleCapture1.concat("capture-move"));
         }
     }
-    if (capture2XY.every((coord) => coord >= 0 && coord < 14)) {
-        const capture2P = board[capture2XY[1]][capture2XY[0]]
-        if ([null, undefined, ""].every((e) => e !== capture2P) && capture2P.charAt(1) !== activePlayer) {
-            pm.push([capture2XY[0], capture2XY[1], "capture-move"]);
+    // And repeat for the other one
+    if (possibleCapture2.every((coord) => coord >= 0 && coord < 14)) {
+        const capture2P = board[possibleCapture2[1]][possibleCapture2[0]]
+        if ([null, undefined, ""].every((e) => e !== capture2P) && capture2P.charAt(1) !== ownerOfPawn) {
+            possibleMoves.push(possibleCapture2.concat("capture-move"));
         }
     }
-    return pm;
+    return possibleMoves;
 }
 export function getNonCheckingMoves(xPos, yPos, board, store) {
     // For each possible move of the clicked piece

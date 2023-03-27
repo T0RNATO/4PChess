@@ -1,5 +1,6 @@
 <template>
   <div class="flex flex-col items-center justify-center w-[49rem] h-[49rem] relative">
+<!--      loop through non-null squares on board-->
       <div class="row group"
            v-for="[i, row] in board.map(subarray => subarray.filter(el => el != null)).entries()"
            :key="i" >
