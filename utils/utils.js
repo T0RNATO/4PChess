@@ -6,30 +6,34 @@ export function getMoves(xPos, yPos, board) {
     const tpos = [xPos, yPos];
     const activeType = board[yPos][xPos].charAt(0);
     const activePlayer = board[yPos][xPos].charAt(1);
-    let dirs = [];
+    let directions = [];
     let possibleMoves = [];
 
     // QUEEN, ROOK, AND BISHOP MOVES
     switch(activeType) {
         case "Q": // fallthrough
         case "B": // fallthrough
-            dirs = [[1, 1], [1, -1], [-1, -1], [-1, 1]];
+            directions = [[1, 1], [1, -1], [-1, -1], [-1, 1]];
             if (activeType === "B") {
                 break;
             }
         case "R":
-            dirs = dirs.concat([[0, 1], [0, -1], [-1, 0], [1, 0]]);
+            directions = directions.concat([[0, 1], [0, -1], [-1, 0], [1, 0]]);
             break;
     }
     if (activeType === "Q" || activeType === "R" || activeType === "B") {
-        for (const d of dirs) {
+        for (const direction of directions) {
             let i = 1;
             while (true) {
-                const x = tpos[0] + d[0] * i;
-                const y = tpos[1] + d[1] * i;
+                const x = tpos[0] + direction[0] * i;
+                const y = tpos[1] + direction[1] * i;
+
                 if (x >= 14 || y >= 14 || x < 0 || y < 0) break;
+
                 const piece = board[y][x];
+
                 if (piece === null || piece === undefined) break;
+
                 if (piece === "") {
                     possibleMoves.push([x, y, "valid-move"]);
                 } else if (piece.charAt(1) !== activePlayer) {

@@ -114,6 +114,10 @@ export const useGameStore = defineStore('game', {
                 this.turn = 0;
             }
             while (this.mated[this.turn]) {
+                if (Object.values(this.mated).every((el) => el)) {
+                    console.log("game over!!")
+                    break;
+                }
                 this.turn++;
                 if (this.turn === 4) {
                     this.turn = 0;
