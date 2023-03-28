@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import {useGameStore} from "@/stores/app";
+import {useGameStore} from "~/stores/fourPlayer";
 import {mapState} from "pinia";
 export default {
     computed: {

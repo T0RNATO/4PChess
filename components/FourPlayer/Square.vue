@@ -4,11 +4,11 @@
     </div>
 </template>
 
-<style src="assets/css/squares.css"></style>
+<style src="../../assets/css/squares.css"></style>
 
 <script>
-import {getNonCheckingMoves, getSquareAtPos, getMoves, arrHasArr} from "@/utils/utils";
-import {useGameStore} from "@/stores/app";
+import {getNonCheckingMoves, getSquareAtPos, getMoves, arrHasArr} from "~/utils/utils";
+import {useGameStore} from "~/stores/fourPlayer";
 import {mapState} from "pinia";
 
 export default {

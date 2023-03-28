@@ -4,7 +4,8 @@
         <img src="@/assets/images/settings.svg" class="absolute m-2 right-0 w-8 hover:rotate-45 transition-all cursor-pointer"
              @click="toggleMenu" alt="Settings Button"/>
         <div class="w-full flex justify-center h-[100vh] items-center">
-            <Game :selected="selected"/>
+            <FourPlayerGame :selected="selected"/>
+<!--            <SixPlayerGame/>-->
         </div>
         <SettingsMenu v-if="settingsMenu" :class="{fadeOut: fadeOut}" v-animationend="anEnd"/>
     </div>
@@ -12,7 +13,7 @@
 </template>
 
 <script>
-import { useGameStore } from "@/stores/app";
+import { useGameStore } from "~/stores/fourPlayer";
 import { mapState } from "pinia";
 import { lerpBg } from "~/utils/utils";
 

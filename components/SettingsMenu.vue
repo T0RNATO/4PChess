@@ -17,7 +17,7 @@
 
 <script>
 import {mapWritableState} from "pinia";
-import {useGameStore} from "~/stores/app";
+import {useGameStore} from "~/stores/fourPlayer";
 
 export default {
     methods: {

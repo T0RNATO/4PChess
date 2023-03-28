@@ -4,7 +4,7 @@
       <div class="row group"
            v-for="[i, row] in board.map(subarray => subarray.filter(el => el != null)).entries()"
            :key="i" >
-        <Square v-for="[j, piece] in row.entries()"
+        <FourPlayerSquare v-for="[j, piece] in row.entries()"
                 :key="String(j) + String(i)"
                 :class="{'square-invert': row.length === 14}"
                 :piece="piece"
@@ -24,12 +24,10 @@
 </style>
 
 <script>
-import {useGameStore} from "@/stores/app";
+import {useGameStore} from "~/stores/fourPlayer";
 import {mapState} from "pinia";
-import PlayerInfo from "~/components/PlayerInfo.vue";
 
 export default {
-    components: {PlayerInfo},
     computed: {
         ...mapState(useGameStore, ["board", "turn"]),
     }

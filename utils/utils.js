@@ -1,4 +1,4 @@
-import { useGameStore } from "~/stores/app";
+import { useGameStore } from "~/stores/fourPlayer";
 
 export function getMoves(xPositionOfMovingPiece, yPositionOfMovingPiece, board) {
     const store = useGameStore();
