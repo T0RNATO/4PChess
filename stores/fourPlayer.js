@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { arrHasArr, castleRook } from "~/utils/utils";
 
-const savedData = ["turn", "check", "mated", "board", "highlight", "castle", "time", "gameStarted", "inc"];
+const keysThatNeedToBeSaved = ["turn", "check", "mated", "board", "highlight", "castle", "time", "gameStarted", "inc"];
 
 export const useGameStore = defineStore('game', {
     state: () => ({
@@ -128,7 +128,7 @@ export const useGameStore = defineStore('game', {
                 }
             }
             let save = {};
-            for (const key of savedData) {
+            for (const key of keysThatNeedToBeSaved) {
                 save[key] = this[key];
             }
             localStorage.data = JSON.stringify(save);
@@ -153,7 +153,6 @@ export const useGameStore = defineStore('game', {
             for (const key in newState) {
                 this[key] = newState[key];
             }
-            console.log(newState)
             if (newState.gameStarted) {
                 setInterval(this.timer, 1000);
             }
