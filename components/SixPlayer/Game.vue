@@ -1,5 +1,7 @@
 <template>
-<SixPlayerHex v-for="hex of defaultBoard" :hex="hex"/>
+    <div class="SixPC-Board">
+        <SixPlayerHex v-for="hex of defaultBoard" :hex="hex"/>
+    </div>
 </template>
 
 <script>
@@ -11,3 +13,9 @@ export default {
     }
 }
 </script>
+
+<style>
+.SixPC-Board {
+    --hex-size: 4%;
+}
+</style>

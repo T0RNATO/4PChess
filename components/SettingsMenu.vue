@@ -11,6 +11,29 @@
             <input type="radio" v-model="settings.theme" value="brown" class="theme" style="outline-color: var(--brown);">
             <input type="radio" v-model="settings.theme" value="grey" class="theme" style="outline-color: var(--grey);">
         </div>
+        <div>
+            <h2 class="text-2xl font-semibold text-center">Timer:</h2>
+            <h2 class="font-medium inline mr-2">Time:</h2>
+            <select v-model.number="timers" :disabled="gameStarted">
+                <option value="60">1 minute</option>
+                <option value="120">2 minutes</option>
+                <option value="300">5 minutes</option>
+                <option value="600">10 minutes</option>
+                <option value="720">12 minutes</option>
+                <option value="900">15 minutes</option>
+                <option value="1200">20 minutes</option>
+            </select><br>
+            <h2 class="font-medium inline mr-2">Increment:</h2>
+            <select v-model.number="inc" :disabled="gameStarted">
+                <option value="0">None</option>
+                <option value="1">1 second</option>
+                <option value="2">2 seconds</option>
+                <option value="3">3 seconds</option>
+                <option value="5">5 seconds</option>
+                <option value="10">10 seconds</option>
+            </select>
+        </div>
+
         <button class="bg-red-500 p-4 rounded-md m-4" @click="resetBoard">Reset Game</button>
     </div>
 </template>
@@ -27,9 +50,17 @@ export default {
                 location.reload();
             }
         }
-        },
+    },
     computed: {
-        ...mapWritableState(useGameStore, ["settings"])
+        ...mapWritableState(useGameStore, ["settings", "gameStarted", "time", "inc"]),
+        timers: {
+            set(newTime) {
+                for (const key in this.time) {
+                    this.time[key] = newTime;
+                }
+            },
+            get() { return this.time["0"]; }
+        }
     }
 }
 </script>
@@ -63,5 +94,8 @@ export default {
 }
 .theme:checked {
     box-shadow: white 0 0 0 2px;
+}
+option, select {
+    color: black !important;
 }
 </style>

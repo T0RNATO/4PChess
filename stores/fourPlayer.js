@@ -1,6 +1,8 @@
 import { defineStore } from 'pinia'
 import { arrHasArr, castleRook } from "~/utils/utils";
 
+const savedData = ["turn", "check", "mated", "board", "highlight", "castle", "time", "gameStarted", "inc"];
+
 export const useGameStore = defineStore('game', {
     state: () => ({
         turn: 0,
@@ -54,7 +56,8 @@ export const useGameStore = defineStore('game', {
             2: 600,
             3: 600
         },
-        gs: false
+        gameStarted: false,
+        inc: 0
     }),
     actions: {
         /**
@@ -100,15 +103,16 @@ export const useGameStore = defineStore('game', {
             this.incrementTurn();
             this.selectPiece([]);
 
-            if (!this.gs) {
+            if (!this.gameStarted) {
                 setInterval(this.timer, 1000)
             }
-            this.gs = true;
+            this.gameStarted = true;
         },
         selectPiece(pos) {
             this.selected = pos;
         },
         incrementTurn() {
+            this.time[this.turn] += this.inc;
             this.turn++;
             if (this.turn === 4) {
                 this.turn = 0;
@@ -123,7 +127,11 @@ export const useGameStore = defineStore('game', {
                     this.turn = 0;
                 }
             }
-            localStorage.data = JSON.stringify(this);
+            let save = {};
+            for (const key of savedData) {
+                save[key] = this[key];
+            }
+            localStorage.data = JSON.stringify(save);
         },
         putInCheck(player) {
             this.check[player] = true;
@@ -145,7 +153,8 @@ export const useGameStore = defineStore('game', {
             for (const key in newState) {
                 this[key] = newState[key];
             }
-            if (newState.gs) {
+            console.log(newState)
+            if (newState.gameStarted) {
                 setInterval(this.timer, 1000);
             }
         },
