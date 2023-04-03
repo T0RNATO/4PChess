@@ -16,6 +16,6 @@ export default {
 
 <style>
 .SixPC-Board {
-    --hex-size: 4%;
+    --hex-size: 22px;
 }
 </style>
