@@ -1,9 +1,10 @@
 import { defineStore } from 'pinia'
-import { arrHasArr, castleRook } from "~/utils/utils";
+import { arrHasArr } from "~/utils/utils";
+import { castleRook } from "~/utils/fourPlayer";
 
 const keysThatNeedToBeSaved = ["turn", "check", "mated", "board", "highlight", "castle", "time", "gameStarted", "inc"];
 
-export const useGameStore = defineStore('game', {
+export const useFourPlayerStore = defineStore('game', {
     state: () => ({
         turn: 0,
         selected: [],
@@ -48,7 +49,8 @@ export const useGameStore = defineStore('game', {
             3: {l: true, r: true}
         },
         settings: {
-            theme: "purple"
+            theme: "purple",
+            sixPlayer: false
         },
         time: {
             0: 600,

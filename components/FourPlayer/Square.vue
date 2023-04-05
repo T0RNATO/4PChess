@@ -7,8 +7,8 @@
 <style src="../../assets/css/squares.css"></style>
 
 <script>
-import {getNonCheckingMoves, getSquareAtPos, getMoves, arrHasArr} from "~/utils/utils";
-import {useGameStore} from "~/stores/fourPlayer";
+import {arrHasArr} from "~/utils/utils";
+import {useFourPlayerStore} from "~/stores/fourPlayer";
 import {mapState} from "pinia";
 
 export default {
@@ -18,7 +18,7 @@ export default {
     },
     computed: {
         inCheck() {
-            const store = useGameStore();
+            const store = useFourPlayerStore();
             if (this.piece.charAt(0) === "K") {
                 return store.check[this.piece.charAt(1)];
             }
@@ -39,11 +39,11 @@ export default {
               ...this.highlightedMoves
             }
         },
-        ...mapState(useGameStore, ["selected", "highlight", "mated", "turn"])
+        ...mapState(useFourPlayerStore, ["selected", "highlight", "mated", "turn"])
     },
     methods: {
         clickHandler() {
-            const store = useGameStore();
+            const store = useFourPlayerStore();
             if (["capture-move", "valid-move", "castle-l", "castle-r"].some((el) => {return this.$el.classList.contains(el)})) {
                 if (this.$el.classList.contains("castle-l")) {
                     store.movePiece(this.pos, "l");
@@ -110,5 +110,5 @@ export default {
 </script>
 
 <script setup>
-import { rotated } from "~/utils/utils"
+import {rotated} from "~/utils/fourPlayer";
 </script>

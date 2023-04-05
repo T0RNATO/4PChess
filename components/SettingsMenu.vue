@@ -34,13 +34,16 @@
             </select>
         </div>
 
+        6 player mode :) <input type="checkbox" v-model="settings.sixPlayer">
+        (Very borked)
+
         <button class="bg-red-500 p-4 rounded-md m-4" @click="resetBoard">Reset Game</button>
     </div>
 </template>
 
 <script>
 import {mapWritableState} from "pinia";
-import {useGameStore} from "~/stores/fourPlayer";
+import {useFourPlayerStore} from "~/stores/fourPlayer";
 
 export default {
     methods: {
@@ -52,7 +55,7 @@ export default {
         }
     },
     computed: {
-        ...mapWritableState(useGameStore, ["settings", "gameStarted", "time", "inc"]),
+        ...mapWritableState(useFourPlayerStore, ["settings", "gameStarted", "time", "inc"]),
         timers: {
             set(newTime) {
                 for (const key in this.time) {

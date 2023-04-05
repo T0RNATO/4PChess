@@ -1,4 +1,6 @@
 import { defineStore } from 'pinia'
+import {getMoves, getPiece} from "~/utils/sixPlayer";
+import {arrHasArr} from "~/utils/utils";
 
 export const useSixPlayerStore = defineStore('sixPlayer', {
     state: () => ({
@@ -1538,6 +1540,31 @@ export const useSixPlayerStore = defineStore('sixPlayer', {
                 "r": -1,
                 "p": "B4"
             }
-        ]
-    })
+        ],
+        validMoves: [],
+        selected: []
+    }),
+    actions: {
+        clickHandler(q, r) {
+            const hexIsValidMove = arrHasArr(this.validMoves, [q, r]);
+
+            if (hexIsValidMove) {
+                const hexMovingTo = getPiece(q, r, this.defaultBoard);
+                const hexMovingFrom = getPiece(this.selected[0], this.selected[1], this.defaultBoard);
+                // Move the piece there, and remove it from the original hex.
+                hexMovingTo.p = hexMovingFrom.p;
+                hexMovingFrom.p = "";
+
+            }
+            // Clear selection and moves
+            this.selected = [];
+            this.validMoves = [];
+
+            // If there's a piece in the hex clicked, show its valid moves, and select it
+            if (getPiece(q, r, this.defaultBoard).p && !hexIsValidMove) {
+                this.selected = [q, r];
+                this.validMoves = getMoves(q, r, this.defaultBoard);
+            }
+        }
+    }
 })

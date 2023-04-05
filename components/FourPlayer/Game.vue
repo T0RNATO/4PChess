@@ -24,12 +24,12 @@
 </style>
 
 <script>
-import {useGameStore} from "~/stores/fourPlayer";
+import {useFourPlayerStore} from "~/stores/fourPlayer";
 import {mapState} from "pinia";
 
 export default {
     computed: {
-        ...mapState(useGameStore, ["board", "turn"]),
+        ...mapState(useFourPlayerStore, ["board", "turn"]),
     }
 }
 </script>

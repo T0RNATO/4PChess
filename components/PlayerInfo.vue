@@ -8,11 +8,11 @@
 </template>
 
 <script>
-import {useGameStore} from "~/stores/fourPlayer";
+import {useFourPlayerStore} from "~/stores/fourPlayer";
 import {mapState} from "pinia";
 export default {
     computed: {
-        ...mapState(useGameStore, ["time", "turn", "mated"]),
+        ...mapState(useFourPlayerStore, ["time", "turn", "mated"]),
         playerTime() {
             const mins = Math.floor(this.time[this.player] / 60);
             let secs = this.time[this.player] % 60
