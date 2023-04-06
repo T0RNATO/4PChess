@@ -34,7 +34,8 @@
             </select>
         </div>
 
-        6 player mode :) <input type="checkbox" v-model="settings.sixPlayer">
+        6 player mode :)
+        <input type="checkbox" v-model="settings.sixPlayer">
         (Very borked)
 
         <button class="bg-red-500 p-4 rounded-md m-4" @click="resetBoard">Reset Game</button>
@@ -62,7 +63,9 @@ export default {
                     this.time[key] = newTime;
                 }
             },
-            get() { return this.time["0"]; }
+            get() {
+                return this.time["0"];
+            }
         }
     }
 }
@@ -70,12 +73,14 @@ export default {
 
 <style>
 .modal {
-  @apply absolute bg-[#262626] rounded-3xl h-[90%] w-[40rem] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 border-4 border-[rgba(0_0_0/0.3)] text-white flex flex-col items-center transition-all;
-  animation: fadeIn 0.3s cubic-bezier(.48,.47,.55,1.31) forwards;
+    @apply absolute bg-[#262626] rounded-3xl h-[90%] w-[40rem] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 border-4 border-[rgba(0_0_0/0.3)] text-white flex flex-col items-center transition-all;
+    animation: fadeIn 0.3s cubic-bezier(.48, .47, .55, 1.31) forwards;
 }
+
 .fadeOut {
-  animation: fadeOut 0.3s cubic-bezier(.45,-0.56,.48,.47) forwards;
+    animation: fadeOut 0.3s cubic-bezier(.45, -0.56, .48, .47) forwards;
 }
+
 @keyframes fadeIn {
     0% {
         opacity: 0;
@@ -84,20 +89,24 @@ export default {
         opacity: 1;
     }
 }
+
 @keyframes fadeOut {
-  0% {
-    opacity: 1;
-  }
-  100% {
-    opacity: 0;
-  }
+    0% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
 }
+
 .theme {
     @apply w-4 aspect-square m-2 outline-offset-[-100px] outline-8 outline
 }
+
 .theme:checked {
     box-shadow: white 0 0 0 2px;
 }
+
 option, select {
     color: black !important;
 }

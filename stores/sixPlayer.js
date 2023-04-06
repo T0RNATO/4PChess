@@ -1,6 +1,6 @@
-import { defineStore } from 'pinia'
-import {getMoves, getPiece} from "~/utils/sixPlayer";
-import {arrHasArr} from "~/utils/utils";
+import { defineStore } from 'pinia';
+import {getMoves6P, getPiece} from "~/utils/sixPlayer";
+import {arrHasArr, lerpBg} from "~/utils/utils";
 
 export const useSixPlayerStore = defineStore('sixPlayer', {
     state: () => ({
@@ -8,7 +8,7 @@ export const useSixPlayerStore = defineStore('sixPlayer', {
             {
                 "q": -10,
                 "r": 1,
-                "p": "R1"
+                "p": "B1"
             },
             {
                 "q": -10,
@@ -43,7 +43,7 @@ export const useSixPlayerStore = defineStore('sixPlayer', {
             {
                 "q": -10,
                 "r": 8,
-                "p": "B1"
+                "p": "R1"
             },
             {
                 "q": -9,
@@ -903,12 +903,12 @@ export const useSixPlayerStore = defineStore('sixPlayer', {
             {
                 "q": 1,
                 "r": 9,
-                "p": "R5"
+                "p": "B5"
             },
             {
                 "q": 2,
                 "r": -10,
-                "p": "B3"
+                "p": "R3"
             },
             {
                 "q": 2,
@@ -1458,12 +1458,12 @@ export const useSixPlayerStore = defineStore('sixPlayer', {
             {
                 "q": 8,
                 "r": 2,
-                "p": "B5"
+                "p": "R5"
             },
             {
                 "q": 9,
                 "r": -10,
-                "p": "R3"
+                "p": "B3"
             },
             {
                 "q": 9,
@@ -1542,7 +1542,8 @@ export const useSixPlayerStore = defineStore('sixPlayer', {
             }
         ],
         validMoves: [],
-        selected: []
+        selected: [],
+        turn: 0
     }),
     actions: {
         clickHandler(q, r) {
@@ -1555,15 +1556,25 @@ export const useSixPlayerStore = defineStore('sixPlayer', {
                 hexMovingTo.p = hexMovingFrom.p;
                 hexMovingFrom.p = "";
 
+                const oldTurn = this.turn;
+                this.incrementTurn();
+                lerpBg(document.querySelector("#body"), oldTurn, this.turn);
             }
             // Clear selection and moves
             this.selected = [];
             this.validMoves = [];
 
             // If there's a piece in the hex clicked, show its valid moves, and select it
-            if (getPiece(q, r, this.defaultBoard).p && !hexIsValidMove) {
+            const pieceClicked = getPiece(q, r, this.defaultBoard).p;
+            if (pieceClicked && pieceClicked.charAt(1) == this.turn && !hexIsValidMove) {
                 this.selected = [q, r];
-                this.validMoves = getMoves(q, r, this.defaultBoard);
+                this.validMoves = getMoves6P(q, r, this.defaultBoard);
+            }
+        },
+        incrementTurn() {
+            this.turn++;
+            if (this.turn === 6) {
+                this.turn = 0;
             }
         }
     }

@@ -45,7 +45,7 @@ export function lerpBg(el, turn1, turn2) {
 * @param {Number} amount  (the amount to fade from a to b)
 * @returns {Number}
 */
-function lerpColour(a, b, amount) {
+export function lerpColour(a, b, amount) {
     const ar = a >> 16,
         ag = a >> 8 & 0xff,
         ab = a & 0xff,
@@ -60,6 +60,6 @@ function lerpColour(a, b, amount) {
 
     return (rr << 16) + (rg << 8) + (rb | 0);
 }
-function lerp (start, end, amt){
+export function lerp (start, end, amt){
     return (1-amt)*start+amt*end;
 }

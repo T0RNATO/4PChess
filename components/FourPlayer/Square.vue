@@ -33,10 +33,12 @@ export default {
         },
         classes() {
             return {
-              'square': true,
-              'check': this.inCheck,
-              'selected': this.pos.every((elem, i) => {return elem === this.selected[i];}),
-              ...this.highlightedMoves
+                'square': true,
+                'check': this.inCheck,
+                'selected': this.pos.every((elem, i) => {
+                    return elem === this.selected[i];
+                }),
+                ...this.highlightedMoves
             }
         },
         ...mapState(useFourPlayerStore, ["selected", "highlight", "mated", "turn"])
@@ -44,7 +46,9 @@ export default {
     methods: {
         clickHandler() {
             const store = useFourPlayerStore();
-            if (["capture-move", "valid-move", "castle-l", "castle-r"].some((el) => {return this.$el.classList.contains(el)})) {
+            if (["capture-move", "valid-move", "castle-l", "castle-r"].some((el) => {
+                return this.$el.classList.contains(el)
+            })) {
                 if (this.$el.classList.contains("castle-l")) {
                     store.movePiece(this.pos, "l");
                 } else if (this.$el.classList.contains("castle-r")) {
@@ -59,7 +63,7 @@ export default {
                 store.clearCheck()
 
                 const board = store.board;
-                for (const [i,row] of board.entries()) {
+                for (const [i, row] of board.entries()) {
                     for (const [j, square] of row.entries()) {
                         // If piece in square
                         if (square && !store.mated[square.charAt(1)]) {
@@ -77,7 +81,7 @@ export default {
 
                 // Checkmate
                 let mate = true;
-                for (const [i,row] of board.entries()) {
+                for (const [i, row] of board.entries()) {
                     for (const [j, square] of row.entries()) {
                         if (square && square.charAt(1) === String(store.turn)) {
                             if (getNonCheckingMoves(j, i, board, store).length) {

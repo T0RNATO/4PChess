@@ -1,21 +1,22 @@
 <template>
     <div id="body">
-    <div @click="closeMenu" id="root" :class="[settings.theme]">
-        <img src="@/assets/images/settings.svg" class="absolute m-2 right-0 w-8 hover:rotate-45 transition-all cursor-pointer"
-             @click="toggleMenu" alt="Settings Button"/>
-        <div class="w-full flex justify-center h-[100vh] items-center">
-            <FourPlayerGame :selected="selected" v-if="!settings.sixPlayer"/>
-            <SixPlayerGame v-if="settings.sixPlayer"/>
+        <div @click="closeMenu" id="root" :class="[settings.theme]">
+            <img src="@/assets/images/settings.svg"
+                 class="absolute m-2 right-0 w-8 hover:rotate-45 transition-all cursor-pointer"
+                 @click="toggleMenu" alt="Settings Button"/>
+            <div class="w-full flex justify-center h-[100vh] items-center">
+                <FourPlayerGame :selected="selected" v-if="!settings.sixPlayer"/>
+                <SixPlayerGame v-if="settings.sixPlayer"/>
+            </div>
+            <SettingsMenu v-if="settingsMenu" :class="{fadeOut: fadeOut}" v-animationend="anEnd"/>
         </div>
-        <SettingsMenu v-if="settingsMenu" :class="{fadeOut: fadeOut}" v-animationend="anEnd"/>
-    </div>
     </div>
 </template>
 
 <script>
-import { useFourPlayerStore } from "~/stores/fourPlayer";
-import { mapState } from "pinia";
-import { lerpBg } from "~/utils/utils";
+import {useFourPlayerStore} from "~/stores/fourPlayer";
+import {mapState} from "pinia";
+import {lerpBg} from "~/utils/utils";
 
 export default {
     mounted() {
@@ -62,7 +63,7 @@ export default {
     },
     watch: {
         turn: {
-            handler(newTurnValue, oldTurnValue){
+            handler(newTurnValue, oldTurnValue) {
                 lerpBg(document.querySelector("#body"), oldTurnValue, newTurnValue);
             }
         }

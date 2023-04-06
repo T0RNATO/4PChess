@@ -50,7 +50,7 @@ export const useFourPlayerStore = defineStore('game', {
         },
         settings: {
             theme: "purple",
-            sixPlayer: false
+            sixPlayer: true
         },
         time: {
             0: 600,

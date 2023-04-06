@@ -8,47 +8,50 @@ const basePieces = {
 }
 
 const playerColours = {
-    0: "#BF3B43",
-    1: "#4185BF",
-    2: "#C09526",
-    3: "#4E9161",
-    4: "#565352",
-    5: "#8a3bbf",
+    0: 0xBF3B43,
+    1: 0x4185BF,
+    2: 0xC09526,
+    3: 0x4E9161,
+    4: 0x565352,
+    5: 0x8a3bbf,
 }
 
 export function getPieceUrl(piece) {
     let pieceBase = basePieces[piece.charAt(0)];
     let player = Number(piece.charAt(1));
     pieceBase = pieceBase.replace("{rotation}", player * 60 + 30);
-    pieceBase = pieceBase.replace("{colour}", playerColours[player]);
+    pieceBase = pieceBase.replace("{colour}", "#" + playerColours[player].toString(16));
 
     return "data:image/svg+xml;base64," + btoa(pieceBase);
 }
 
-export function getMoves(qOfMovingPiece, rOfMovingPiece, board) {
+export function getMoves6P(qOfMovingPiece, rOfMovingPiece, board) {
     const movingPiece = getPiece(qOfMovingPiece, rOfMovingPiece, board);
     if (movingPiece) {
         const typeOfMovingPiece = movingPiece.p.charAt(0);
         const ownerOfMovingPiece = movingPiece.p.charAt(1);
 
-        let QRBmovingDirections = [];
+        let vecQRB = [];
+
+        const BISHOP_MOVES = [[-1, 0], [1, -1], [0, 1]];
+        const ROOK_MOVES = [[0, -1], [-1, 1], [1, 0]];
+
         let possibleMoves = [];
 
         // QUEEN, ROOK, AND BISHOP MOVES
         switch(typeOfMovingPiece) {
-            case "Q": // fallthrough
-            case "B": // fallthrough
-                QRBmovingDirections = [[-1, 0], [1, -1], [0, 1]];
-                if (typeOfMovingPiece === "B") {
-                    break;
-                }
-            case "R":
-                QRBmovingDirections = QRBmovingDirections.concat([[0, -1], [-1, 1], [1, 0]]);
+            case "Q":
+                vecQRB = BISHOP_MOVES.concat(ROOK_MOVES);
                 break;
+            case "B": // fallthrough
+                vecQRB = rotateVectorBulk(BISHOP_MOVES, ownerOfMovingPiece);
+                break;
+            case "R":
+                vecQRB = rotateVectorBulk(ROOK_MOVES, ownerOfMovingPiece);
         }
         if (typeOfMovingPiece === "Q" || typeOfMovingPiece === "R" || typeOfMovingPiece === "B") {
             // For each direction the piece can move in
-            for (const direction of QRBmovingDirections) {
+            for (const direction of vecQRB) {
                 let i = 1;
                 while (true) {
                     // Move one hex in that direction
@@ -56,19 +59,21 @@ export function getMoves(qOfMovingPiece, rOfMovingPiece, board) {
                     const r = rOfMovingPiece + direction[1] * i;
 
                     // Find the piece there
-                    const piece = getPiece(q, r, board);
+                    let piece = getPiece(q, r, board);
 
                     // If it doesn't exist or is off the board, move to the next direction
                     if (piece === null || piece === undefined) break;
 
+                    piece = piece.p;
+
                     // If no piece, valid move
                     if (piece === "") {
                         possibleMoves.push([q, r]);
-                    } else if (piece.p.charAt(1) !== ownerOfMovingPiece) {
+                    } else if (piece.charAt(1) !== ownerOfMovingPiece) {
                         // If there is a piece, and it's not yours, make it a valid move and skip to the next direction
                         possibleMoves.push([q, r]);
                         break;
-                    } else if (piece.p.charAt(1) === ownerOfMovingPiece) {
+                    } else if (piece.charAt(1) === ownerOfMovingPiece) {
                         // If it's yours, skip to the next direction
                         break;
                     }
@@ -104,20 +109,75 @@ export function getMoves(qOfMovingPiece, rOfMovingPiece, board) {
 }
 
 function pawnMoves(q, r, owner) {
-    let vec1 = [1, -1, 0];
-    let vec2 = [0, -1, 1];
-    let vec3 = [1, -2, 1];
+    let moveVectors = [[1, -1, 0], [0, -1, 1], [1, -2, 1]];
 
-    for (let i = owner; i > 0; i--) {
-        vec1 = [-vec1[1], -vec1[2], -vec1[0]];
-        vec2 = [-vec2[1], -vec2[2], -vec2[0]];
+    // Rotate the moves so that it faces the owner
+    for (let [i, move] of moveVectors.entries()) {
+        moveVectors[i] = rotateVector(move, owner);
     }
-    const hex1 = [q + vec1[0], r + vec1[1]];
-    const hex2 = [q + vec2[0], r + vec2[1]];
 
-    return [hex1, hex2];
+    // The third coordinate of the hex the pawn is in
+    const s = -q - r;
+
+    let possibleMoves = [];
+    for (const vec of moveVectors) {
+        possibleMoves.push([vec[0] + q, vec[1] + r])
+    }
+
+    // Has the pawn moved yet?
+    if (!(q === 9 || q === -9 || r === 9 || r === -9 || s === 9 || s === -9)) {
+        // If it has, disallow the two-hex move
+        possibleMoves.splice(2, 1)
+    }
+
+    // Return the possible moves
+    return possibleMoves;
+}
+
+function rotateVector(coords, times) {
+    for (let i = Number(times); i > 0; i--) {
+        coords = [-coords[1], -coords[2], -coords[0]];
+    }
+    return coords;
+}
+
+function rotateVectorBulk(listOfCoordinates, times) {
+    let shallowCopy = listOfCoordinates.slice();
+    for (const [i, vector] of shallowCopy.entries()) {
+        vector[2] = -vector[0] - vector[1];
+        shallowCopy[i] = rotateVector(vector, times);
+    }
+    return shallowCopy;
 }
 
 export function getPiece(q, r, board) {
     return board.find(hex => hex.q === q && hex.r === r);
+}
+
+const turnColours = [0x8c1818, 0x286283, 0x8f7f1f, 0x40732f, 0x8c1818];
+let lerpR = 0;
+
+import {lerp, lerpColour} from "~/utils/utils";
+
+export function lerpBg(el, oldTurn, newTurnValue) {
+    lerpR += 0.05;
+    const startC = playerColours[oldTurn];
+    const endC = playerColours[newTurnValue];
+    const hex = "#" + lerpColour(startC, endC, lerpR).toString(16)
+    if (newTurnValue === 0) {
+        newTurnValue = 6;
+    }
+    const turn = lerp(oldTurn, newTurnValue, lerpR)
+    el.style.setProperty("--turn-color", hex)
+    el.style.setProperty("--turn", turn)
+    if (lerpR < 1) {
+        requestAnimationFrame(() => {
+            lerpBg(el, oldTurn, newTurnValue)
+        })
+    } else {
+        lerpR = 0;
+        if (newTurnValue === 4) {
+            el.style.setProperty("--turn", 0)
+        }
+    }
 }
