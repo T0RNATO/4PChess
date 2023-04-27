@@ -6,9 +6,9 @@ body {
     overflow-x: hidden;
 }
 #body {
-    --turn: 0;
+    --turn: 30;
     --turn-color: #be2424;
-    background-image: linear-gradient(calc(var(--turn) * 90deg + 180deg), var(--turn-color), #262626, #262626);
+    background-image: linear-gradient(calc(var(--turn) * 1deg), var(--turn-color), #262626, #262626);
 }
 #root {
     --blue: #70acf9;

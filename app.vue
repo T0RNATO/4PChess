@@ -8,7 +8,7 @@
                 <FourPlayerGame :selected="selected" v-if="!settings.sixPlayer"/>
                 <SixPlayerGame v-if="settings.sixPlayer"/>
             </div>
-            <SettingsMenu v-if="settingsMenu" :class="{fadeOut: fadeOut}" v-animationend="anEnd"/>
+            <SettingsMenu v-if="settingsMenuIsOpen" :class="{fadeOut: menuIsFadingOut}" v-animationend="anEnd"/>
         </div>
     </div>
 </template>
@@ -31,8 +31,8 @@ export default {
     },
     data() {
         return {
-            settingsMenu: false,
-            fadeOut: false
+            settingsMenuIsOpen: false,
+            menuIsFadingOut: false
         }
     },
     directives: {
@@ -44,20 +44,20 @@ export default {
     },
     methods: {
         anEnd() {
-            if (this.fadeOut) {
-                this.fadeOut = false;
-                this.settingsMenu = false;
+            if (this.menuIsFadingOut) {
+                this.menuIsFadingOut = false;
+                this.settingsMenuIsOpen = false;
             }
         },
         closeMenu() {
-            if (this.settingsMenu) {
-                this.fadeOut = true;
+            if (this.settingsMenuIsOpen) {
+                this.menuIsFadingOut = true;
             }
         },
         toggleMenu(event) {
-            if (!this.settingsMenu) {
+            if (!this.settingsMenuIsOpen) {
                 event.stopPropagation();
-                this.settingsMenu = true;
+                this.settingsMenuIsOpen = true;
             }
         }
     },

@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
-import {getMoves6P, getPiece} from "~/utils/sixPlayer";
-import {arrHasArr, lerpBg} from "~/utils/utils";
+import {getMoves6P, getPiece, lerpBg} from "~/utils/sixPlayer";
+import {arrHasArr} from "~/utils/utils";
 
 export const useSixPlayerStore = defineStore('sixPlayer', {
     state: () => ({

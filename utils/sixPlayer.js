@@ -155,29 +155,37 @@ export function getPiece(q, r, board) {
 }
 
 const turnColours = [0x8c1818, 0x286283, 0x8f7f1f, 0x40732f, 0x8c1818];
-let lerpR = 0;
+let animationProgress = 0;
 
 import {lerp, lerpColour} from "~/utils/utils";
 
 export function lerpBg(el, oldTurn, newTurnValue) {
-    lerpR += 0.05;
-    const startC = playerColours[oldTurn];
-    const endC = playerColours[newTurnValue];
-    const hex = "#" + lerpColour(startC, endC, lerpR).toString(16)
+    animationProgress += 0.05;
+    const beginningColour = playerColours[oldTurn];
+    const endColour = playerColours[newTurnValue];
+
+    let modifiedTurnValue = newTurnValue;
+
+    const currentColour = "#" + lerpColour(beginningColour, endColour, animationProgress).toString(16);
+
+    // Allow background to rotate smoothly from player 5 to player 0 instead of taking the long way around
     if (newTurnValue === 0) {
-        newTurnValue = 6;
+        modifiedTurnValue = 6;
     }
-    const turn = lerp(oldTurn, newTurnValue, lerpR)
-    el.style.setProperty("--turn-color", hex)
-    el.style.setProperty("--turn", turn)
-    if (lerpR < 1) {
+    // Value from 0 to 1
+    const currentBackgroundRotation = lerp(oldTurn, modifiedTurnValue, animationProgress);
+
+    el.style.setProperty("--turn-color", currentColour);
+    el.style.setProperty("--turn", currentBackgroundRotation * 60 + 30);
+
+    if (animationProgress < 1) {
         requestAnimationFrame(() => {
             lerpBg(el, oldTurn, newTurnValue)
         })
     } else {
-        lerpR = 0;
-        if (newTurnValue === 4) {
-            el.style.setProperty("--turn", 0)
+        animationProgress = 0;
+        if (modifiedTurnValue === 6) {
+            el.style.setProperty("--turn", 30)
         }
     }
 }

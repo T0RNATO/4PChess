@@ -27,7 +27,7 @@ export function lerpBg(el, turn1, turn2) {
     }
     const turn = lerp(turn1, turn2, lerpR)
     el.style.setProperty("--turn-color", hex)
-    el.style.setProperty("--turn", turn)
+    el.style.setProperty("--turn", turn * 90)
     if (lerpR < 1) {
         requestAnimationFrame(() => {
             lerpBg(el, turn1, turn2)
